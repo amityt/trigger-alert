@@ -31,7 +31,7 @@ func NotifySlack(slackURL string, jiraTicketLink string, expDetails types.Experi
 		Type: "section",
 		Text: TextDetails{
 			Type: "mrkdwn",
-			Text: "Experiment Name:* " + expDetails.ExperimentName,
+			Text: "*Experiment Name:* " + expDetails.ExperimentName,
 		},
 	}
 	notificationDetails = append(notificationDetails, expName)
@@ -40,7 +40,7 @@ func NotifySlack(slackURL string, jiraTicketLink string, expDetails types.Experi
 		Type: "section",
 		Text: TextDetails{
 			Type: "mrkdwn",
-			Text: "*Engine Name:* " + expDetails.EngineName,
+			Text: "*Fault Identifier:* " + expDetails.EngineName,
 		},
 	}
 	notificationDetails = append(notificationDetails, engineName)
@@ -49,37 +49,55 @@ func NotifySlack(slackURL string, jiraTicketLink string, expDetails types.Experi
 		Type: "section",
 		Text: TextDetails{
 			Type: "mrkdwn",
-			Text: "*FailStep:* " + expDetails.FailStep,
+			Text: "*Failed Step:* " + expDetails.FailStep + " 🚫",
 		},
 	}
 	notificationDetails = append(notificationDetails, failStep)
 
-	phase := Section{
+	duration := Section{
 		Type: "section",
 		Text: TextDetails{
 			Type: "mrkdwn",
-			Text: "*Phase:* " + expDetails.Phase,
+			Text: "*Chaos Duration:* " + expDetails.Duration + " ⏱️",
 		},
 	}
-	notificationDetails = append(notificationDetails, phase)
+	notificationDetails = append(notificationDetails, duration)
 
-	probeSuccessPercentage := Section{
-		Type: "section",
-		Text: TextDetails{
-			Type: "mrkdwn",
-			Text: "*ProbeSuccessPercentage:* " + expDetails.ProbeSuccessPercentage,
-		},
-	}
-	notificationDetails = append(notificationDetails, probeSuccessPercentage)
+	//phase := Section{
+	//	Type: "section",
+	//	Text: TextDetails{
+	//		Type: "mrkdwn",
+	//		Text: "*Phase:* " + expDetails.Phase,
+	//	},
+	//}
+	//notificationDetails = append(notificationDetails, phase)
+	//
+	//probeSuccessPercentage := Section{
+	//	Type: "section",
+	//	Text: TextDetails{
+	//		Type: "mrkdwn",
+	//		Text: "*ProbeSuccessPercentage:* " + expDetails.ProbeSuccessPercentage,
+	//	},
+	//}
+	//notificationDetails = append(notificationDetails, probeSuccessPercentage)
 
 	linkJira := Section{
 		Type: "section",
 		Text: TextDetails{
 			Type: "mrkdwn",
-			Text: "*Jira Ticket Link:* " + jiraTicketLink,
+			Text: "*Jira Ticket:* " + jiraTicketLink,
 		},
 	}
 	notificationDetails = append(notificationDetails, linkJira)
+
+	separator := Section{
+		Type: "section",
+		Text: TextDetails{
+			Type: "mrkdwn",
+			Text: "----------------------------",
+		},
+	}
+	notificationDetails = append(notificationDetails, separator)
 
 	notifyMsg := &SlackNotify{
 		Blocks: notificationDetails,

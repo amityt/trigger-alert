@@ -19,6 +19,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"os"
 	"strings"
+	"time"
 	"trigger-alert/notify"
 	"trigger-alert/types"
 )
@@ -90,6 +91,9 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 			if err != nil {
 				fmt.Println(err)
 			}
+
+			duration := crd.Status.Experiments[0].LastUpdateTime.Sub(time.Unix(crd.CreationTimestamp.Unix(), 0))
+
 			if strings.ToLower(string(expRes.Status.ExperimentStatus.Verdict)) == "fail" {
 				expDetails := types.ExperimentDetails{
 					ExperimentName:         crd.Labels["workflow_name"],
@@ -100,6 +104,7 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 					ExpPod:                 crd.Status.Experiments[0].ExpPod,
 					RunnerPod:              crd.Status.Experiments[0].Runner,
 					Namespace:              crd.Namespace,
+					Duration:               duration.String(),
 				}
 
 				ticketID, err := notify.NotifyJira("https://"+c.JiraUserName+":"+c.JiraPassword+"@"+c.JiraURL, expDetails)

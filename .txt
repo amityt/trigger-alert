@@ -1,0 +1,28 @@
+time="2022-11-24T11:28:12Z" level=info msg="Experiment Name: pod-cpu-hog"
+time="2022-11-24T11:28:12Z" level=info msg="[PreReq]: Getting the ENV for the pod-cpu-hog experiment"
+time="2022-11-24T11:28:14Z" level=info msg="[PreReq]: Updating the chaos result of pod-cpu-hog experiment (SOT)"
+time="2022-11-24T11:28:16Z" level=info msg="The application information is as follows" Label="app=nginx" App Kind=deployment Namespace=default
+time="2022-11-24T11:28:16Z" level=info msg="[Status]: Verify that the AUT (Application Under Test) is running (pre-chaos)"
+time="2022-11-24T11:28:16Z" level=info msg="[Status]: Checking whether application containers are in ready state"
+time="2022-11-24T11:28:16Z" level=info msg="[Status]: The Container status are as follows" Readiness=true container=nginx Pod=nginx-85b98978db-x2gz7
+time="2022-11-24T11:28:18Z" level=info msg="[Status]: Checking whether application pods are in running state"
+time="2022-11-24T11:28:18Z" level=info msg="[Status]: The status of Pods are as follows" Pod=nginx-85b98978db-x2gz7 Status=Running
+time="2022-11-24T11:28:20Z" level=info msg="[Info]: The chaos tunables are:" CPU Load Percentage=100 Sequence=parallel PodsAffectedPerc=0 CPU Core=1
+time="2022-11-24T11:28:20Z" level=info msg="[Chaos]:Number of pods targeted: 1"
+time="2022-11-24T11:28:20Z" level=info msg="[Info]: Target pods list for chaos, [nginx-85b98978db-x2gz7]"
+time="2022-11-24T11:28:20Z" level=info msg="[Info]: Details of application under chaos injection" ContainerName=nginx PodName=nginx-85b98978db-x2gz7 NodeName=gke-vedant-upgrade-test--default-pool-4222322b-3dt8
+time="2022-11-24T11:28:20Z" level=info msg="[Status]: Checking the status of the helper pods"
+time="2022-11-24T11:28:25Z" level=info msg="pod-cpu-hog-helper-packir helper pod is in Failed state"
+time="2022-11-24T11:28:27Z" level=info msg="[Wait]: waiting till the completion of the helper pod"
+time="2022-11-24T11:28:27Z" level=info msg="helper pod status: Failed"
+time="2022-11-24T11:28:27Z" level=info msg="[Status]: The running status of Pods are as follows" Pod=pod-cpu-hog-helper-packir Status=Failed
+time="2022-11-24T11:28:28Z" level=error msg="[Error]: CPU hog failed, err: helper pod failed"
+
+W1124 11:28:10.470190       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+time="2022-11-24T11:28:10Z" level=info msg="Experiments details are as follows" Engine Namespace=litmus Experiments List="[pod-cpu-hog]" Engine Name=pod-cpu-hog-p10nhmm6 appLabels="app=nginx" appNs=default appKind=deployment Service Account Name=litmus-admin
+time="2022-11-24T11:28:10Z" level=info msg="Getting the ENV Variables"
+time="2022-11-24T11:28:10Z" level=info msg="Preparing to run Chaos Experiment: pod-cpu-hog"
+time="2022-11-24T11:28:11Z" level=info msg="Started Chaos Experiment Name: pod-cpu-hog, with Job Name: pod-cpu-hog-paz4rw"
+time="2022-11-24T11:28:41Z" level=info msg="Chaos Pod Completed, Experiment Name: pod-cpu-hog, with Job Name: pod-cpu-hog-paz4rw"
+time="2022-11-24T11:28:43Z" level=info msg="Chaos Engine has been updated with result, Experiment Name: pod-cpu-hog"
+time="2022-11-24T11:28:43Z" level=info msg="[skip]: skipping the job deletion as jobCleanUpPolicy is set to {}"

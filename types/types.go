@@ -9,4 +9,5 @@ type ExperimentDetails struct {
 	ExpPod                 string
 	RunnerPod              string
 	Namespace              string
+	Duration               string
 }
