@@ -55,7 +55,7 @@ func NotifyJira(jiraUrl string, expDetails types.ExperimentDetails) (string, err
 		return "", err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, jiraUrl, bytes.NewBuffer(data))
+	request, err := http.NewRequest(http.MethodPost, jiraUrl+"/rest/api/2/issue", bytes.NewBuffer(data))
 
 	if err != nil {
 		return "", err

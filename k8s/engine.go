@@ -29,6 +29,8 @@ type TriggerResponseConfig struct {
 	SlackURL        string
 	JiraURL         string
 	ExperimentRunID string
+	JiraUserName    string
+	JiraPassword    string
 	Namespace       string
 }
 
@@ -36,6 +38,8 @@ func LoadEnv() TriggerResponseConfig {
 	return TriggerResponseConfig{
 		SlackURL:        os.Getenv("SLACK_URL"),
 		JiraURL:         os.Getenv("JIRA_URL"),
+		JiraUserName:    os.Getenv("JIRA_USERNAME"),
+		JiraPassword:    os.Getenv("JIRA_PASSWORD"),
 		ExperimentRunID: os.Getenv("EXPERIMENT_RUN_ID"),
 		Namespace:       os.Getenv("NAMESPACE"),
 	}
@@ -98,19 +102,25 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 					Namespace:              crd.Namespace,
 				}
 
-				ticketID, err := notify.NotifyJira(c.JiraURL, expDetails)
+				ticketID, err := notify.NotifyJira("https://"+c.JiraUserName+":"+c.JiraPassword+"@"+c.JiraURL, expDetails)
 				if err != nil {
 					fmt.Println(err)
 				}
+
+				err = notify.NotifySlack(c.SlackURL, "https://"+c.JiraURL+"/browse/"+ticketID, expDetails)
+
+				if err != nil {
+					fmt.Println(err)
+				}
+
 				expLogs := GetLogs(expDetails.ExpPod, expDetails.Namespace)
 				runnerLogs := GetLogs(expDetails.RunnerPod, expDetails.Namespace)
-				fmt.Println(expLogs + "\n" + runnerLogs)
 				err = writeLogsInFile(ticketID, expLogs+"\n"+runnerLogs)
 				if err != nil {
 					fmt.Println(err)
 					return err
 				}
-				_, err = notify.AttachLogJira(c.JiraURL+ticketID+"/attachments", ticketID)
+				_, err = notify.AttachLogJira("https://"+c.JiraUserName+":"+c.JiraPassword+"@"+c.JiraURL+"/rest/api/2/issue/"+ticketID+"/attachments", ticketID)
 				if err != nil {
 					fmt.Println(err)
 				}

@@ -5,11 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"os"
 	"trigger-alert/types"
 )
-
-var slackUrl = os.Getenv("SLACK_URL")
 
 type SlackNotify struct {
 	Blocks []Section `json:"blocks"`
@@ -26,7 +23,7 @@ type TextDetails struct {
 }
 
 // NotifySlack notifies slack about the summary of DB upgrade
-func NotifySlack(expDetails types.ExperimentDetails) error {
+func NotifySlack(slackURL string, jiraTicketLink string, expDetails types.ExperimentDetails) error {
 
 	var notificationDetails []Section
 
@@ -75,6 +72,15 @@ func NotifySlack(expDetails types.ExperimentDetails) error {
 	}
 	notificationDetails = append(notificationDetails, probeSuccessPercentage)
 
+	linkJira := Section{
+		Type: "section",
+		Text: TextDetails{
+			Type: "mrkdwn",
+			Text: "*Jira Ticket Link:* " + jiraTicketLink,
+		},
+	}
+	notificationDetails = append(notificationDetails, linkJira)
+
 	notifyMsg := &SlackNotify{
 		Blocks: notificationDetails,
 	}
@@ -83,7 +89,7 @@ func NotifySlack(expDetails types.ExperimentDetails) error {
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, slackUrl, bytes.NewBuffer(data))
+	request, err := http.NewRequest(http.MethodPost, slackURL, bytes.NewBuffer(data))
 
 	if err != nil {
 		return err
