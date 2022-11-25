@@ -97,7 +97,7 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 					RunnerPod:              crd.Status.Experiments[0].Runner,
 					Namespace:              crd.Namespace,
 				}
-				fmt.Println("Hello")
+
 				ticketID, err := notify.NotifyJira(c.JiraURL, expDetails)
 				if err != nil {
 					fmt.Println(err)
@@ -109,6 +109,10 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 				if err != nil {
 					fmt.Println(err)
 					return err
+				}
+				_, err = notify.AttachLogJira(c.JiraURL+ticketID+"/attachments", ticketID)
+				if err != nil {
+					fmt.Println(err)
 				}
 			}
 		}
