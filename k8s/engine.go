@@ -111,7 +111,7 @@ func (c *TriggerResponseConfig) GetChaosEngines(namespace string, workflowRunID 
 				if err != nil {
 					fmt.Println(err)
 				}
-
+				fmt.Println("ticketID",ticketID)
 				err = notify.NotifySlack(c.SlackURL, "https://"+c.JiraURL+"/browse/"+ticketID, expDetails)
 
 				if err != nil {
